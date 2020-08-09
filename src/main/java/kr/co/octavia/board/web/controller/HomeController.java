@@ -14,7 +14,6 @@ public class HomeController {
     //@RequestMapping(value = {"", "/index"})
     @RequestMapping("/")
     public String home(HttpServletRequest request, Model model) throws Exception {
-        log.info("home~");
         model.addAttribute("name","옥타비아");
         request.setAttribute("tempVal","테스트 ㅋㅋㅋㅋㅋ");
         return "index";
