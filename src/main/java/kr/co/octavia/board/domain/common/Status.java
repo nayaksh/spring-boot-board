@@ -1,4 +1,4 @@
-package kr.co.octavia.board.domain;
+package kr.co.octavia.board.domain.common;
 
 public enum Status {
     CREATED,

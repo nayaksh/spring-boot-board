@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
+    <title>Board</title>
 </head>
 <body>
-<span th:text="${name}"></span>
-<span th:text="${tempVal}"></span>
+    <th:block layout:fragment="content">
+        메인 페이지
+    </th:block>
 </body>
 </html>

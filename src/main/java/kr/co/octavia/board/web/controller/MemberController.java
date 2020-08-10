@@ -10,4 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/member")
 public class MemberController {
+
+    // 가입
+    // 로그인 // security
+
 }
