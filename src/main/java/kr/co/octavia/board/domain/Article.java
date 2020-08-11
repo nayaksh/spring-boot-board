@@ -2,6 +2,7 @@ package kr.co.octavia.board.domain;
 
 import kr.co.octavia.board.domain.common.BaseEntity;
 import kr.co.octavia.board.domain.common.Status;
+import kr.co.octavia.board.service.dto.ArticleDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,9 +46,26 @@ public class Article extends BaseEntity {
     private Member member;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private final List<File> files = new ArrayList<>();
+    @JoinColumn(name = "file_id")
+    private List<File> files = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    public static Article toEntity(ArticleDto articleDto) {
+        Member member = null;
+        if (articleDto.getMemberDto() != null) {
+            member = Member.toEntity(articleDto.getMemberDto());
+        }
+
+        return Article.builder()
+                .id(articleDto.getId())
+                .title(articleDto.getTitle())
+                .content(articleDto.getContent())
+                .files(articleDto.getFiles())
+                .member(member)
+                .status(articleDto.getStatus())
+                .build();
+    }
 }

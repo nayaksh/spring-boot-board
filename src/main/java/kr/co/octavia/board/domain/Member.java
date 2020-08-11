@@ -1,12 +1,15 @@
 package kr.co.octavia.board.domain;
 
 import kr.co.octavia.board.domain.common.BaseTimeEntity;
+import kr.co.octavia.board.domain.common.Role;
 import kr.co.octavia.board.domain.common.Status;
+import kr.co.octavia.board.service.dto.MemberDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,4 +45,18 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.MEMBER;
+
+    public static Member toEntity(MemberDto memberDto) {
+        return Member.builder()
+                .id(memberDto.getId())
+                .loginId(memberDto.getLoginId())
+                .password(memberDto.getPassword())
+                .name(memberDto.getName())
+                .status(memberDto.getStatus())
+                .role(memberDto.getRole())
+                .build();
+    }
 }
