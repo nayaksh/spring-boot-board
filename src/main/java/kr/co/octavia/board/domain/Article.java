@@ -36,9 +36,9 @@ public class Article extends BaseEntity {
     @Column(name = "article_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(length = 100, nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,17 +55,40 @@ public class Article extends BaseEntity {
 
     public static Article toEntity(ArticleDto articleDto) {
         Member member = null;
+        List<File> files = new ArrayList<>();
+
         if (articleDto.getMemberDto() != null) {
             member = Member.toEntity(articleDto.getMemberDto());
+        }
+
+        if (articleDto.getFiles() != null) {
+            articleDto.getFiles().forEach(fileDto -> {
+                files.add(File.toEntity(fileDto));
+            });
         }
 
         return Article.builder()
                 .id(articleDto.getId())
                 .title(articleDto.getTitle())
                 .content(articleDto.getContent())
-                .files(articleDto.getFiles())
+                .files(files)
                 .member(member)
                 .status(articleDto.getStatus())
                 .build();
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void update(String title, String content, ArrayList<File> files) {
+        this.title = title;
+        this.content = content;
+        this.files = files;
+    }
+
+    public void update(Status status) {
+        this.status = status;
     }
 }

@@ -5,9 +5,13 @@ import kr.co.octavia.board.repository.ArticleRepository;
 import kr.co.octavia.board.service.dto.ArticleDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
@@ -20,8 +24,17 @@ public class ArticleService {
     }
 
     //수정
-    public void modifyArticle() throws Exception {
+    public ArticleDto modifyArticle(ArticleDto articleDto) throws Exception {
+//        Optional<Article> article = articleRepository.findById(articleDto.getId());
+//        Article updatedArticle = article.orElseThrow(() -> new Exception("Not Exists Article :" + articleDto.getId()));
 
+        Article updatedArticle = articleRepository.findById(articleDto.getId())
+                .orElseThrow(() -> new Exception("Not Exists Article :" + articleDto.getId()));
+
+        // TODO : 파일 수정 추가
+        updatedArticle.update(articleDto.getTitle(), articleDto.getContent());
+
+        return ArticleDto.toDto(updatedArticle);
     }
 
     //삭제
@@ -35,8 +48,9 @@ public class ArticleService {
     }
 
     //조회
-    public void getArticle() throws Exception {
-
+    public ArticleDto getArticle(Long articleId) throws Exception {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new Exception("Not Exists Article"));
+        return ArticleDto.toDto(article);
     }
 
     //목록 조회

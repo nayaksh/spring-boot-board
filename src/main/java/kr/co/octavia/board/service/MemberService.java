@@ -6,9 +6,11 @@ import kr.co.octavia.board.repository.MemberRepository;
 import kr.co.octavia.board.service.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;

@@ -25,21 +25,30 @@ public class ArticleDto {
     private String title;
     private String content;
     private MemberDto memberDto;
-    private List<File> files = new ArrayList<>();
+    private List<FileDto> files = new ArrayList<>();
     private Status status;
 
     public static ArticleDto toDto(Article article) {
         MemberDto memberDto = null;
+        List<FileDto> filesDto = new ArrayList<>();
 
         if (article.getMember() != null) {
             memberDto = MemberDto.toDto(article.getMember());
+        }
+
+        if (article.getFiles() != null) {
+            List<FileDto> files = new ArrayList<>();
+
+            article.getFiles().forEach(file -> {
+                filesDto.add(FileDto.toDto(file));
+            });
         }
 
         return ArticleDto.builder()
                 .id(article.getId())
                 .title(article.getTitle())
                 .content(article.getContent())
-                .files(article.getFiles())
+                .files(filesDto)
                 .memberDto(memberDto)
                 .status(article.getStatus())
                 .build();

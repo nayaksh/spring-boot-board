@@ -1,6 +1,7 @@
 package kr.co.octavia.board.domain;
 
 import kr.co.octavia.board.domain.common.BaseEntity;
+import kr.co.octavia.board.service.dto.FileDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,4 +35,14 @@ public class File extends BaseEntity {
 
     private long contentSize;
     private String extension;
+
+    public static File toEntity(FileDto fileDto) {
+        return File.builder()
+                .id(fileDto.getId())
+                .name(fileDto.getName())
+                .path(fileDto.getPath())
+                .contentSize(fileDto.getContentSize())
+                .extension(fileDto.getExtension())
+                .build();
+    }
 }
