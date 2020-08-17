@@ -20,9 +20,17 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate.format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
 logging:
   level:
     org.hibernate.sql: debug
+
+
+application:
+  storage-path : D://Temp/octavina-board
