@@ -8,10 +8,12 @@
     <form method="post" th:action="@{/article/create}" th:object="${articleDto}" enctype="multipart/form-data">
         <label for="title" >제목 : </label>
         <input type="text" id="title" name="title" th:field="*{title}">
+        <br>
         <label for="content" >내용 : </label>
         <textarea type="text" id="content" name="content" th:field="*{content}"></textarea>
+        <br>
         <input type="file" name="file">
-
+        <br>
         <button type="submit">등록</button>
     </form>
 </body>

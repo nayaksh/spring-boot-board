@@ -10,7 +10,9 @@
 </head>
 <body>
     <th:block layout:fragment="content">
-        메인 페이지
+        메인 페이지<br>
+        <a th:href="@{/member/login/page}">로그인 페이지</a><br>
+        <a th:href="@{/article/create/form}">글 등록 페이지</a><br>
     </th:block>
 </body>
 </html>

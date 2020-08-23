@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,15 +24,17 @@ public class MemberDto {
     private String name;
     private Status status;
     private Role role;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
-    public static MemberDto toDto(Member member) {
-        return MemberDto.builder()
-                .id(member.getId())
-                .loginId(member.getLoginId())
-                .password(member.getPassword())
-                .name(member.getName())
-                .status(member.getStatus())
-                .role(member.getRole())
+    public Member toEntity() {
+        return Member.builder()
+                .id(this.id)
+                .loginId(this.loginId)
+                .name(this.name)
+                .password(this.password)
+                .role(this.role)
+                .status(this.status)
                 .build();
     }
 

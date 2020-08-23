@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" th:action="@{/article/update}" th:object="${articleDto}" enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="*{id}">
+    <label for="title" >제목 : </label>
+    <input type="text" id="title" name="title" th:field="*{title}">
+    <br>
+    <label for="content" >내용 : </label>
+    <textarea type="text" id="content" name="content" th:field="*{content}"></textarea>
+    <br>
+    <input type="file" name="file">
+    <br>
+    <button type="submit">수정</button>
+</form>
+</body>
+</html>

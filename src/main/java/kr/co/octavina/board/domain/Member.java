@@ -46,18 +46,7 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.MEMBER;
-
-    public static Member toEntity(MemberDto memberDto) {
-        return Member.builder()
-                .id(memberDto.getId())
-                .loginId(memberDto.getLoginId())
-                .password(memberDto.getPassword())
-                .name(memberDto.getName())
-                .status(memberDto.getStatus())
-                .role(memberDto.getRole())
-                .build();
-    }
+    private Role role;
 
     public void updateName(String name) {
         this.name = name;
@@ -65,5 +54,18 @@ public class Member extends BaseTimeEntity {
 
     public void update(String loginId) {
         this.loginId = loginId;
+    }
+
+    public MemberDto toDto() {
+        return MemberDto.builder()
+                .id(this.id)
+                .loginId(this.loginId)
+                .password(this.password)
+                .name(this.name)
+                .status(this.status)
+                .role(this.role)
+                .createdDate(this.getCreatedDate())
+                .createdDate(this.getModifiedDate())
+                .build();
     }
 }

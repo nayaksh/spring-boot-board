@@ -28,20 +28,22 @@ class MemberServiceTest {
     public void 사용자_등록() {
         //given
         MemberDto newMember = new MemberDto();
-        newMember.setLoginId("rarity");
+//        newMember.setLoginId("rarity");
+//        newMember.setPassword("1234");
+//        newMember.setName("래리티");
+        newMember.setLoginId("applejack");
         newMember.setPassword("1234");
-        newMember.setName("래리티");
+        newMember.setName("애플잭");
+
         newMember.setRole(Role.MEMBER);
         newMember.setStatus(Status.CREATED);
-        Member memberEntity = Member.toEntity(newMember);
+        Member memberEntity = newMember.toEntity();
 
         //when
         Member savedMember = memberRepository.save(memberEntity);
 
         //then
-        log.info(memberEntity.getId() + "");
-        log.info(savedMember.getId() + "");
-        assertThat(memberEntity.getId()).isEqualTo(savedMember.getId());
+        assertThat(memberEntity.getLoginId()).isEqualTo(savedMember.getLoginId());
         assertThat(memberEntity.getName()).isEqualTo(savedMember.getName());
         assertThat(memberEntity.getStatus()).isEqualTo(savedMember.getStatus());
     }
@@ -58,7 +60,7 @@ class MemberServiceTest {
         //when
         Member member = memberRepository.findMemberByLoginId(oldMember.getLoginId());
 
-        MemberDto findMember = MemberDto.toDto(member);
+        MemberDto findMember = member.toDto();
 
         //then
         assertThat(oldMember.getLoginId()).isEqualTo(findMember.getLoginId());
@@ -73,7 +75,7 @@ class MemberServiceTest {
 
         //when
         Member member = memberRepository.findMemberByLoginIdAndStatus(loginId, Status.CREATED);
-        MemberDto findMember = MemberDto.toDto(member);
+        MemberDto findMember = member.toDto();
 
         //then
         assertThat(loginId).isEqualTo(findMember.getLoginId());

@@ -25,7 +25,6 @@ public class Comment extends BaseEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    // cascade = CascadeType.ALL
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;

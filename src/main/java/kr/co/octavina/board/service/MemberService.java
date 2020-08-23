@@ -24,13 +24,12 @@ public class MemberService {
 
     // 등록
     public Long create(MemberDto memberDto) throws Exception {
-        Member member = Member.toEntity(memberDto);
-        Member saveMember = memberRepository.save(member);
+        Member saveMember = memberRepository.save(memberDto.toEntity());
         return saveMember.getId();
     }
 
     //로그인
-    public String login(MemberDto memberDto, HttpServletRequest request) throws Exception {
+    public String login(MemberDto memberDto, String ip) throws Exception {
         MemberDto member = getMemberOfActivated(memberDto.getLoginId());
 
         if (member == null) {
@@ -49,7 +48,7 @@ public class MemberService {
         memberSession.setId(member.getId());
         memberSession.setLoginId(member.getLoginId());
         memberSession.setName(member.getName());
-        memberSession.setIp(request.getRemoteAddr());
+        memberSession.setIp(ip);
         
         return member.getLoginId();
     }
@@ -57,13 +56,18 @@ public class MemberService {
     //조회
     public MemberDto getMember(String loginId) throws Exception {
         Member findMember = memberRepository.findMemberByLoginId(loginId);
-        return MemberDto.toDto(findMember);
+        return findMember.toDto();
     }
 
     //활성 회원 조회
     public MemberDto getMemberOfActivated(String loginId) throws Exception {
         Member findMember = memberRepository.findMemberByLoginIdAndStatus(loginId, Status.CREATED);
-        return MemberDto.toDto(findMember);
+        return findMember.toDto();
     }
 
+    public MemberDto getMemberById(Long memberId) throws Exception {
+        return memberRepository.findById(memberId)
+                .orElseGet(() -> Member.builder().build())
+                .toDto();
+    }
 }

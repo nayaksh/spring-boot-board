@@ -3,6 +3,7 @@ package kr.co.octavina.board.domain;
 import kr.co.octavina.board.domain.common.BaseEntity;
 import kr.co.octavina.board.domain.common.Status;
 import kr.co.octavina.board.service.dto.ArticleDto;
+import kr.co.octavina.board.service.dto.MemberDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,15 +14,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,39 +37,31 @@ public class Article extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by_id")
-    private Member member;
-
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "file_id")
-//    private List<File> files = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private Status status = Status.CREATED;
 
-    public static Article toEntity(ArticleDto articleDto) {
-        Member member = null;
-//        List<File> files = new ArrayList<>();
+    public ArticleDto toDto() {
+        MemberDto creatorDto = MemberDto.builder().build();
+        MemberDto modifierDto = MemberDto.builder().build();
 
-        if (articleDto.getMemberDto() != null) {
-            member = Member.toEntity(articleDto.getMemberDto());
+        if (this.getCreator() != null) {
+            creatorDto = this.getCreator().toDto();
         }
 
-//        if (articleDto.getFiles() != null) {
-//            articleDto.getFiles().forEach(fileDto -> {
-//                files.add(File.toEntity(fileDto));
-//            });
-//        }
+        if (this.getModifier() != null) {
+            modifierDto = this.getModifier().toDto();
+        }
 
-        return Article.builder()
-                .id(articleDto.getId())
-                .title(articleDto.getTitle())
-                .content(articleDto.getContent())
-                //.files(files)
-                .member(member)
-                .status(articleDto.getStatus())
+        return ArticleDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .creator(creatorDto)
+                .createdDate(this.getCreatedDate())
+                .modifier(modifierDto)
+                .modifiedDate(this.getModifiedDate())
+                .status(this.status)
                 .build();
     }
 
@@ -82,13 +70,8 @@ public class Article extends BaseEntity {
         this.content = content;
     }
 
-//    public void update(String title, String content, ArrayList<File> files) {
-//        this.title = title;
-//        this.content = content;
-//        //this.files = files;
-//    }
-
     public void update(Status status) {
         this.status = status;
     }
+
 }

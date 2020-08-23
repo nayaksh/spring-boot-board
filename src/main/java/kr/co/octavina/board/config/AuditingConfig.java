@@ -1,5 +1,6 @@
 package kr.co.octavina.board.config;
 
+import kr.co.octavina.board.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +24,19 @@ public class AuditingConfig {
 //        };
 //    }
 
+//    @Bean
+//    AuditorAware<String> auditorAware() {
+//        return () -> Optional.ofNullable(memberSession.getLoginId());
+//    }
+
+//    @Bean
+//    AuditorAware<Long> auditorAware() {
+//        return () -> Optional.ofNullable(memberSession.getId());
+//    }
+
     @Bean
-    AuditorAware<String> auditorAware() {
-        return () -> Optional.ofNullable(memberSession.getLoginId());
+    AuditorAware<Member> auditorAware() {
+        return () -> Optional.ofNullable(Member.builder().id(memberSession.getId()).build());
     }
+
 }

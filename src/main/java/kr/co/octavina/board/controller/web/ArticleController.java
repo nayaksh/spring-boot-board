@@ -1,14 +1,12 @@
 package kr.co.octavina.board.controller.web;
 
-import kr.co.octavina.board.domain.Article;
-import kr.co.octavina.board.domain.common.Status;
 import kr.co.octavina.board.service.ArticleService;
 import kr.co.octavina.board.service.dto.ArticleDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,52 +17,66 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/article")
 public class ArticleController {
 
-
     private final ArticleService articleService;
-    //등록
-    //수정
-    //삭제
-    //리스트
-    //검색
 
-    @RequestMapping(value = "/create/form", method = RequestMethod.GET)
+    // 등록 화면
+    @RequestMapping(value = "/article/create/form", method = RequestMethod.GET)
     public String form(Model model) {
         ArticleDto articleDto = new ArticleDto();
         model.addAttribute("articleDto", articleDto);
         return "/article/write";
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    // 등록
+    @RequestMapping(value = "/article/create", method = RequestMethod.POST)
     public String create(ArticleDto articleDto, @RequestParam("file") List<MultipartFile> files) throws Exception {
-        log.info(articleDto.toString());
-
-//        articleService.createArticle(articleDto);
-        articleDto.setStatus(Status.CREATED);
         Long id = articleService.createArticle(articleDto, files);
-        log.info("글등록 : " + id);
-//        for (MultipartFile file : files) {
-//            log.info(file.getName());
-//            log.info(file.getOriginalFilename());
-//            log.info(file.getContentType());
-//            log.info(file.getSize()+"");
-//        }
 
         return "redirect:/article/list";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    // 조회
+    @RequestMapping(value = "/article/{id}", method = RequestMethod.GET)
+    public String getArticle(@PathVariable("id") Long articleId, Model model) throws Exception {
+        ArticleDto article = articleService.getArticle(articleId);
+
+        model.addAttribute("article",article);
+
+        return "/article/view";
+
+    }
+
+    // 수정 화면
+    @RequestMapping(value = "/article/update/form/{articleId}", method = RequestMethod.GET)
+    public String updateForm(@PathVariable("articleId") Long articleId, Model model) throws Exception {
+        ArticleDto articleDto = articleService.getArticle(articleId);
+        model.addAttribute("articleDto", articleDto);
+        return "article/modify";
+    }
+    
+    // 수정
+    @RequestMapping(value = "/article/update", method = RequestMethod.POST)
     public String update(ArticleDto articleDto, @RequestParam("file") List<MultipartFile> files) throws Exception {
-
+        ArticleDto modify = articleService.modify(articleDto);
         return "redirect:/article/list";
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    // 제거
+    @RequestMapping(value = "/article/erase/{id}", method = RequestMethod.POST)
+    public String update(@PathVariable("id") Long articleId) throws Exception {
+        articleService.eraseArticle(articleId);
+        return "redirect:/article/list";
+    }
+
+    // 목록
+    @RequestMapping(value = "/article/list", method = RequestMethod.GET)
     public String articles(Model model) throws Exception {
         log.info("글목록 페이지.....");
         return "/article/list";
     }
+
+    //검색
 
 }
