@@ -175,22 +175,22 @@ class ArticleServiceTest {
 //    }
 
     @Test
-    public void 목록_조회() throws Exception {
-        PageRequestDto pageRequestDto = new PageRequestDto();
-        pageRequestDto.setPage(1);
-        pageRequestDto.setSize(20);
-        Sort.Order order1 = new Sort.Order(Sort.Direction.DESC,"createdDate");
-        Sort.Order order2 = new Sort.Order(Sort.Direction.ASC,"title");
-        List<Sort.Order> orders = new ArrayList<>();
-        orders.add(order1);
-        orders.add(order2);
-        pageRequestDto.setOrders(orders);
-
-
-        String jsonStr = new ObjectMapper().writeValueAsString(pageRequestDto);
-        log.info(jsonStr);
-
-        articleRepository.findAll(pageRequestDto.of());
+    public void 목록_기본_조회() throws Exception {
+//        PageRequestDto pageRequestDto = new PageRequestDto();
+//        pageRequestDto.setPage(1);
+//        pageRequestDto.setSize(20);
+//        Sort.Order order1 = new Sort.Order(Sort.Direction.DESC,"createdDate");
+//        Sort.Order order2 = new Sort.Order(Sort.Direction.ASC,"title");
+//        List<Sort.Order> orders = new ArrayList<>();
+//        orders.add(order1);
+//        orders.add(order2);
+//        pageRequestDto.setOrders(orders);
+//
+//
+//        String jsonStr = new ObjectMapper().writeValueAsString(pageRequestDto);
+//        log.info(jsonStr);
+//
+//        articleRepository.findAll(pageRequestDto.of());
     }
 
     @Test

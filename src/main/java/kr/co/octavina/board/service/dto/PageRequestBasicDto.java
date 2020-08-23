@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class PageRequestDtoBasic {
+public class PageRequestBasicDto {
     private final int DEFAULT_SIZE = 10;
     private final int MAX_SIZE = 50;
 
@@ -32,18 +32,4 @@ public class PageRequestDtoBasic {
     public org.springframework.data.domain.PageRequest of() {
         return org.springframework.data.domain.PageRequest.of(this.page-1, this.size, this.direction, "createdDate");
     }
-
-//    public org.springframework.data.domain.PageRequest of() {
-//        Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "createdDate");
-//        Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "creator");
-//        List<Sort.Order> orders = new ArrayList<>();
-//
-//        orders.add(order1);
-//        orders.add(order2);
-//
-//        Sort sort = Sort.by(orders);
-//
-//        return org.springframework.data.domain.PageRequest.of(this.page-1, this.size, sort);
-//    }
-
 }

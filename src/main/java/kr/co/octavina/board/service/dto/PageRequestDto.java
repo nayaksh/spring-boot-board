@@ -1,6 +1,7 @@
 package kr.co.octavina.board.service.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -8,8 +9,10 @@ import org.springframework.data.domain.Sort;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Getter
+
+@Setter @Getter
 @ToString
 public class PageRequestDto {
     private final int DEFAULT_SIZE = 10;
@@ -17,7 +20,7 @@ public class PageRequestDto {
 
     private int page;
     private int size;
-    private List<Sort.Order> orders = new ArrayList<>();
+    private List<OrderDto> orderDtos = new ArrayList<>();
 
     public void setPage(int page) {
         this.page = page <= 0 ?  1 : page;
@@ -27,12 +30,21 @@ public class PageRequestDto {
         this.size = size > MAX_SIZE ? DEFAULT_SIZE : size;
     }
 
-    public void setOrders(List<Sort.Order> orders) {
-        this.orders = orders;
+    public org.springframework.data.domain.PageRequest of() {
+        Sort sort = Sort.by(this.getOrders());
+        return org.springframework.data.domain.PageRequest.of(this.page-1, this.size, sort);
     }
 
-    public org.springframework.data.domain.PageRequest of() {
-        Sort sort = Sort.by(this.orders);
-        return org.springframework.data.domain.PageRequest.of(this.page-1, this.size, sort);
+    public List<Sort.Order> getOrders() {
+        return this.orderDtos.stream()
+                .map(orderDto -> new Sort.Order(orderDto.direction, orderDto.property))
+                .collect(Collectors.toList());
+    }
+
+    @Setter @Getter
+    @ToString
+    static class OrderDto {
+        private Sort.Direction direction;
+        private String property;
     }
 }
