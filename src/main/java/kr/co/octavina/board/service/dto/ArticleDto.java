@@ -45,6 +45,20 @@ public class ArticleDto {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
+    public static class ArticleSimpleDto {
+        private Long id;
+        private String title;
+        private String content;
+        private MemberDto creator;
+        private LocalDateTime createdDate;
+        private Status status;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
     public static class ArticleContentDto {
         private String title;
         private String content;

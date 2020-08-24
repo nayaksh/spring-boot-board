@@ -74,7 +74,7 @@ public class FileService {
     // 목록
 
     // 로컬에 파일 복사
-    public FileDto copyFile(MultipartFile file) throws IOException {
+    private FileDto copyFile(MultipartFile file) throws IOException {
         String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
         String storagePath = FileUtil.createPath();
         String storageFullPath = appResource.getStoragePath() + storagePath;

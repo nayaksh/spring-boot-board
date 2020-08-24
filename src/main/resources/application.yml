@@ -27,6 +27,10 @@ spring:
     multipart:
       max-file-size: 1024MB
       max-request-size: 1024MB
+  data:
+    web:
+      pageable:
+        max-page-size: 50
 logging:
   level:
     org.hibernate.sql: debug

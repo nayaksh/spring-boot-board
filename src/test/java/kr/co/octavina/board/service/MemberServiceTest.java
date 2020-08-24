@@ -31,9 +31,13 @@ class MemberServiceTest {
 //        newMember.setLoginId("rarity");
 //        newMember.setPassword("1234");
 //        newMember.setName("래리티");
-        newMember.setLoginId("applejack");
+//        newMember.setLoginId("applejack");
+//        newMember.setPassword("1234");
+//        newMember.setName("애플잭");
+
+        newMember.setLoginId("pinkiepie");
         newMember.setPassword("1234");
-        newMember.setName("애플잭");
+        newMember.setName("핑키파이");
 
         newMember.setRole(Role.MEMBER);
         newMember.setStatus(Status.CREATED);

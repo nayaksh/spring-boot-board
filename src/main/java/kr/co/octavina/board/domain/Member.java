@@ -65,7 +65,7 @@ public class Member extends BaseTimeEntity {
                 .status(this.status)
                 .role(this.role)
                 .createdDate(this.getCreatedDate())
-                .createdDate(this.getModifiedDate())
+                .modifiedDate(this.getModifiedDate())
                 .build();
     }
 }

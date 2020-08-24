@@ -2,22 +2,25 @@ package kr.co.octavina.board.controller.rest;
 
 import kr.co.octavina.board.repository.ArticleRepository;
 import kr.co.octavina.board.service.ArticleService;
+import kr.co.octavina.board.service.dto.ArticleDto;
 import kr.co.octavina.board.service.dto.ArticleDto.ArticleContentDto;
 import kr.co.octavina.board.service.dto.PageRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static kr.co.octavina.board.service.dto.ArticleDto.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,13 +49,15 @@ public class ArticleApiController {
 
     @RequestMapping("/api/article/list")
     public void getArticlesPagination(@RequestBody PageRequestDto pageRequestDto) {
-//        PageRequestDto pageRequestDto = new PageRequestDto();
-//        pageRequestDto.setPage(1);
-//        pageRequestDto.setSize(20);
-//        pageRequestDto.setDirection(Sort.Direction.DESC);
-
         log.info(pageRequestDto.toString());
-
         articleRepository.findAll(pageRequestDto.of());
     }
+
+    @RequestMapping("/api/article/list/v2")
+    public ResponseEntity<?> getArticlesPagination(Pageable pageable) throws Exception {
+        log.info(pageable.toString());
+        Page<ArticleSimpleDto> articleDtoPage = articleService.getArticlesByPagination(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(articleDtoPage);
+    }
+
 }

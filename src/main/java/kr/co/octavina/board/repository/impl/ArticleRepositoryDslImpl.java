@@ -25,6 +25,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static kr.co.octavina.board.domain.QArticle.article;

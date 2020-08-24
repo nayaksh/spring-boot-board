@@ -20,6 +20,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.List;
 
+import static kr.co.octavina.board.service.dto.ArticleDto.*;
+
 @Entity
 @Table(name = "article")
 @Getter
@@ -61,6 +63,23 @@ public class Article extends BaseEntity {
                 .createdDate(this.getCreatedDate())
                 .modifier(modifierDto)
                 .modifiedDate(this.getModifiedDate())
+                .status(this.status)
+                .build();
+    }
+
+    public ArticleSimpleDto toArticleSimpleDto() {
+        MemberDto creatorDto = MemberDto.builder().build();
+
+        if (this.getCreator() != null) {
+            creatorDto = this.getCreator().toDto();
+        }
+
+        return ArticleSimpleDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .creator(creatorDto)
+                .createdDate(this.getCreatedDate())
                 .status(this.status)
                 .build();
     }

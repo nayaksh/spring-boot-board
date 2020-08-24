@@ -15,9 +15,9 @@ import java.util.Optional;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long>, ArticleRepositoryDsl {
 
-//    @Query("select a from Article a left join File f on a.id = f.id where a.id = :id")
-//    Article findArticleById(@Param("id") Long id);
-
+//    @Query("select a from Article a inner join File f on a.id = f.id where a.id = :id")
+//    @Query("select a from Article a inner join Member f on a.id = f.id where a.id = :id")
+//    Article findAllWithFilesById(@Param("id") Long id);
 
     @Modifying
     @Query("delete from Article a where a.id = :id")
@@ -27,5 +27,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>, Article
 //    @Query("select a from Article a join fetch a.creator left join fetch a.modifier where a.id = :id")
     Optional<Article> findArticlesWithCreator(@Param("id") Long id);
 
-
+    @Query(value = "select a from Article a inner join fetch a.creator",
+            countQuery = "select count(a) from Article a")
+    Page<Article> findAllByPagination(@Param("pageable") Pageable pageable);
 }

@@ -47,7 +47,7 @@ class ArticleServiceTest {
     @Rollback(false)
     public void 글_등록() throws Exception {
         //given
-        MemberDto loginMember = MemberDto.builder().id(1L).loginId("rarity").password("1234").build();
+        MemberDto loginMember = MemberDto.builder().loginId("pinkiepie").password("1234").build();
         String loginId = memberService.login(loginMember, request.getRemoteAddr());
 
         for (int i = 0; i < 100; i++) {
@@ -209,7 +209,13 @@ class ArticleServiceTest {
         System.out.println("result.getNumberOfElements() = " + result.getNumberOfElements());
         System.out.println("result.getSort() = " + result.getSort());
 
-        result.getContent().stream().forEach(a -> System.out.println("a = " + a));
+        result.getContent().stream()
+                .forEach(a -> System.out.println("a = " + a));
+    }
+
+    @Test
+    public void 파일같이_조회() throws Exception {
+//        Article article = articleRepository.findAllWithFilesById(6L);
     }
 
 }

@@ -3,9 +3,7 @@ package kr.co.octavina.board.service;
 import kr.co.octavina.board.config.AppResource;
 import kr.co.octavina.board.config.MemberSession;
 import kr.co.octavina.board.domain.Article;
-import kr.co.octavina.board.domain.File;
 import kr.co.octavina.board.domain.Member;
-import kr.co.octavina.board.domain.QArticle;
 import kr.co.octavina.board.domain.common.Status;
 import kr.co.octavina.board.repository.ArticleRepository;
 import kr.co.octavina.board.repository.FileRepository;
@@ -15,10 +13,9 @@ import kr.co.octavina.board.service.dto.ArticleDto.ArticleContentDto;
 import kr.co.octavina.board.service.dto.ArticleSearchCondition;
 import kr.co.octavina.board.service.dto.ArticleSearchDto;
 import kr.co.octavina.board.service.dto.FileDto;
-import kr.co.octavina.board.service.dto.MemberDto;
 import kr.co.octavina.board.service.dto.PageRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.dialect.function.StandardAnsiSqlAggregationFunctions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +23,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static kr.co.octavina.board.service.dto.ArticleDto.ArticleSimpleDto;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class ArticleService {
@@ -116,14 +113,18 @@ public class ArticleService {
     }
 
     // 목록 조회
+    @Deprecated
     public Page<Article> getArticlesByPagination(PageRequestDto pageRequestDto) throws Exception {
         PageRequest pageRequest = pageRequestDto.of();
         return articleRepository.findAll(pageRequest);
     }
 
-    //검색
-    public void searchArticles() throws Exception {
-
+    // 목록 조회
+    public Page<ArticleSimpleDto> getArticlesByPagination(Pageable pageable) throws Exception {
+        log.info(pageable.getSort().toString());
+        // contents를 Dto로 변환하여 반환 한다
+        return articleRepository.findAllByPagination(pageable)
+                .map(Article::toArticleSimpleDto);
     }
 
     //검색

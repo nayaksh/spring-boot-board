@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Setter @Getter
 @ToString
+@Deprecated
 public class PageRequestDto {
     private final int DEFAULT_SIZE = 10;
     private final int MAX_SIZE = 50;

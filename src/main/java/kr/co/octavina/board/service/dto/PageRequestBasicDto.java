@@ -2,13 +2,11 @@ package kr.co.octavina.board.service.dto;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-
-import java.util.List;
 
 @Getter
 @ToString
+@Deprecated
 public class PageRequestBasicDto {
     private final int DEFAULT_SIZE = 10;
     private final int MAX_SIZE = 50;

@@ -12,6 +12,8 @@
 <th:block layout:fragment="content">
     <span th:text="${article.title}"></span><br>
     <span th:text="${article.content}"></span><br>
+    <span th:text="${#temporals.format(article.createdDate,'yyyy-MM-dd HH:mm:ss')}"></span><br>
+    <br>
     <span th:text="${article.creator.getLoginId()}"></span><br>
     <span th:text="${article.creator.getName()}"></span><br>
     <br>
