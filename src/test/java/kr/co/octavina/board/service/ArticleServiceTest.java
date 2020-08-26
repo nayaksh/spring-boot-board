@@ -1,6 +1,5 @@
 package kr.co.octavina.board.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.octavina.board.domain.Article;
 import kr.co.octavina.board.domain.common.Status;
 import kr.co.octavina.board.repository.ArticleRepository;
@@ -8,7 +7,6 @@ import kr.co.octavina.board.service.dto.ArticleDto;
 import kr.co.octavina.board.service.dto.ArticleSearchCondition;
 import kr.co.octavina.board.service.dto.ArticleSearchDto;
 import kr.co.octavina.board.service.dto.MemberDto;
-import kr.co.octavina.board.service.dto.PageRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -16,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestConstructor;
@@ -24,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -47,10 +47,11 @@ class ArticleServiceTest {
     @Rollback(false)
     public void 글_등록() throws Exception {
         //given
-        MemberDto loginMember = MemberDto.builder().loginId("pinkiepie").password("1234").build();
+        MemberDto loginMember = MemberDto.builder().loginId("rarity").password("1234").build();
+
         String loginId = memberService.login(loginMember, request.getRemoteAddr());
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             String str = UUID.randomUUID().toString();
 
             ArticleDto articleDto = ArticleDto.builder()
@@ -60,6 +61,7 @@ class ArticleServiceTest {
                     .build();
 
             //when
+            TimeUnit.SECONDS.sleep(1L);
             Article savedArticle = articleRepository.save(articleDto.toEntity());
 
             //then
@@ -197,11 +199,18 @@ class ArticleServiceTest {
     public void 검색_페이징() throws Exception {
         ArticleSearchCondition condition = new ArticleSearchCondition();
         condition.setTitle("제목");
-        List<String> sort = new ArrayList<>();
-        sort.add("createdDate");
-        PageRequest pageRequest = PageRequest.of(0, 5);
+        condition.setCreatorName("래리티");
 
-        Page<ArticleSearchDto> result = articleService.searchArticlesByPagination(condition, pageRequest);
+        Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "createdDate");
+        Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "title");
+        Sort sort = Sort.by(order1, order2);
+
+        Pageable pageable = PageRequest.of(0, 5, sort);
+
+        //when
+        Page<ArticleSearchDto> result = articleService.searchArticlesByPagination(condition, pageable);
+
+        //then
         System.out.println("result.getNumber() = " + result.getNumber());
         System.out.println("result.getTotalPages() = " + result.getTotalPages());
         System.out.println("result.getTotalElements() = " + result.getTotalElements());
@@ -209,7 +218,34 @@ class ArticleServiceTest {
         System.out.println("result.getNumberOfElements() = " + result.getNumberOfElements());
         System.out.println("result.getSort() = " + result.getSort());
 
-        result.getContent().stream()
+        result.getContent()
+                .forEach(a -> System.out.println("a = " + a));
+    }
+
+    @Test
+    public void 검색_페이징2() throws Exception {
+        ArticleSearchCondition condition = new ArticleSearchCondition();
+        condition.setTitle("제목");
+        condition.setCreatorName("래리티");
+
+        Sort.Order order1 = new Sort.Order(Sort.Direction.DESC, "createdDate");
+        Sort.Order order2 = new Sort.Order(Sort.Direction.ASC, "creatorName");
+        Sort sort = Sort.by(order1, order2);
+
+        Pageable pageable = PageRequest.of(0, 5, sort);
+
+        //when
+        Page<ArticleSearchDto> result = articleRepository.findArticlesWithCreatorByPagination(condition, pageable);
+
+        //then
+        System.out.println("result.getNumber() = " + result.getNumber());
+        System.out.println("result.getTotalPages() = " + result.getTotalPages());
+        System.out.println("result.getTotalElements() = " + result.getTotalElements());
+        System.out.println("result.getSize() = " + result.getSize());
+        System.out.println("result.getNumberOfElements() = " + result.getNumberOfElements());
+        System.out.println("result.getSort() = " + result.getSort());
+
+        result.getContent()
                 .forEach(a -> System.out.println("a = " + a));
     }
 

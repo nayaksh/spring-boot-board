@@ -28,6 +28,7 @@ public class ArticleDto {
     private Long id;
     private String title;
     private String content;
+    private Integer readCount;
     private MemberDto creator;
     private LocalDateTime createdDate;
     private MemberDto modifier;
@@ -37,10 +38,11 @@ public class ArticleDto {
 
     public Article toEntity() throws Exception {
         return Article.builder()
-                .id(this.id)
-                .title(this.title)
-                .content(this.content)
-                .status(this.status)
+                .id(this.getId())
+                .title(this.getTitle())
+                .content(this.getContent())
+                .readCount(this.getReadCount())
+                .status(this.getStatus())
                 .build();
     }
 
@@ -52,6 +54,7 @@ public class ArticleDto {
         private String title;
         private String content;
         private MemberDto creator;
+        private int readCount;
         private LocalDateTime createdDate;
         private Status status;
     }

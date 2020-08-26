@@ -129,6 +129,6 @@ public class ArticleService {
 
     //검색
     public Page<ArticleSearchDto> searchArticlesByPagination(ArticleSearchCondition condition, Pageable pageable) throws Exception {
-        return articleRepository.findSearchArticlesByPagination(condition, pageable);
+        return articleRepository.findArticlesByPagination(condition, pageable);
     }
 }

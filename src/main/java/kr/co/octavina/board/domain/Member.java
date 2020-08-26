@@ -1,5 +1,6 @@
 package kr.co.octavina.board.domain;
 
+import kr.co.octavina.board.domain.common.Address;
 import kr.co.octavina.board.domain.common.BaseTimeEntity;
 import kr.co.octavina.board.domain.common.Role;
 import kr.co.octavina.board.domain.common.Status;
@@ -11,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -48,6 +51,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
+    @Embedded
+    private Address address;
+
     public void updateName(String name) {
         this.name = name;
     }
@@ -66,6 +72,7 @@ public class Member extends BaseTimeEntity {
                 .role(this.role)
                 .createdDate(this.getCreatedDate())
                 .modifiedDate(this.getModifiedDate())
+                .addressDto(this.address.toDto())
                 .build();
     }
 }

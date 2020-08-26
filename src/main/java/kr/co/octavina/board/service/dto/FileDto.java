@@ -32,11 +32,11 @@ public class FileDto {
 
     public File toEntity(Article article) {
         return File.builder()
-                .id(this.id)
-                .contentSize(this.contentSize)
-                .extension(this.extension)
-                .name(this.name)
-                .path(this.path)
+                .id(this.getId())
+                .contentSize(this.getContentSize())
+                .extension(this.getExtension())
+                .name(this.getName())
+                .path(this.getPath())
                 .article(article)
                 .build();
     }

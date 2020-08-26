@@ -21,12 +21,15 @@ import kr.co.octavina.board.service.dto.QArticleSearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 
 import static kr.co.octavina.board.domain.QArticle.article;
 import static kr.co.octavina.board.domain.QMember.member;
@@ -60,15 +63,7 @@ public class ArticleRepositoryDslImpl implements ArticleRepositoryDsl {
     }
 
     @Override
-    public Page<ArticleSearchDto> findSearchArticlesByPagination(ArticleSearchCondition condition, Pageable pageable) {
-        OrderSpecifier<?> sortedColumn = getSortedColumn(Order.DESC, article,"createdDate");
-        OrderSpecifier<?> sortedColumn2 = getSortedColumn(Order.ASC, article,"id");
-
-        List<OrderSpecifier<?>> order = new ArrayList<>();
-        order.add(sortedColumn);
-        order.add(sortedColumn2);
-
-
+    public Page<ArticleSearchDto> findArticlesByPagination(ArticleSearchCondition condition, Pageable pageable) {
         QueryResults<ArticleSearchDto> result = queryFactory
                 .select(new QArticleSearchDto(
                         article.title,
@@ -77,10 +72,8 @@ public class ArticleRepositoryDslImpl implements ArticleRepositoryDsl {
                         article.creator.name.as("creatorName")))
                 .from(article)
                 .innerJoin(article.creator)
-                .where(titleLike(condition.getTitle()))
-//                .orderBy(new OrderSpecifier<>(Order.DESC, article.createdDate))
-                .orderBy(order.toArray(new OrderSpecifier[0]))
-                .orderBy()
+                .where(titleLike(condition.getTitle()), creatorNameEq(condition.getCreatorName()))
+                .orderBy(getOrderBySort(pageable, article))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -88,8 +81,47 @@ public class ArticleRepositoryDslImpl implements ArticleRepositoryDsl {
         return new PageImpl<>(result.getResults(), pageable, result.getTotal());
     }
 
+    @Override
+    public Page<ArticleSearchDto> findArticlesWithCreatorByPagination(ArticleSearchCondition condition, Pageable pageable) {
+        pageable.getSort();
+
+        QueryResults<ArticleSearchDto> results = queryFactory
+                .select(new QArticleSearchDto(
+                        article.title,
+                        article.content,
+                        article.creator.loginId.as("creatorLoginId"),
+                        article.creator.name.as("creatorName")))
+                .from(article)
+                .innerJoin(article.creator)
+                .where(creatorNameEq("래리티"))
+//                .orderBy(getSortedColumn(Sort.Direction.DESC, article, "createdDate"),
+//                        getSortedColumn(Sort.Direction.ASC, article.creator, "name"))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+    }
+
     private BooleanExpression titleLike(String title) {
         return StringUtils.isEmpty(title) ? null : article.title.contains(title);
+    }
+
+    private BooleanExpression creatorNameEq(String creator) {
+        return StringUtils.isEmpty(creator) ? null : article.creator.name.eq(creator);
+    }
+
+
+    public static OrderSpecifier<?>[] getOrderBySort(Pageable pageable, Path<?> parent) {
+        return pageable.getSort().stream()
+                .map(s -> getSortedColumn(s.getDirection(), parent, s.getProperty()))
+                .toArray(OrderSpecifier[]::new);
+                //.toArray(sort -> new OrderSpecifier[0]);
+    }
+
+    public static OrderSpecifier<?> getSortedColumn(Sort.Direction order, Path<?> parent, String fieldName) {
+        Path<Object> fieldPath = Expressions.path(Object.class, parent, fieldName);
+        return new OrderSpecifier(Order.valueOf(order.name()), fieldPath);
     }
 
     public static OrderSpecifier<?> getSortedColumn(Order order, Path<?> parent, String fieldName) {

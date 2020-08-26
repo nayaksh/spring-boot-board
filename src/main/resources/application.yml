@@ -14,6 +14,8 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:tcp://127.0.0.1/~/h2database/board
+    #url: jdbc:h2:tcp://127.0.0.1/~/h2database/board3;;MODE=Oracle
+    #url: jdbc:h2:mem:testdb;MODE=Oracle
     username: octavia
     password:
   jpa:
@@ -21,6 +23,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+    #database-platform: org.hibernate.dialect.Oracle10gDialect
     properties:
       hibernate.format_sql: true
   servlet:

@@ -1,9 +1,11 @@
 package kr.co.octavina.board.service;
 
 import kr.co.octavina.board.domain.Member;
+import kr.co.octavina.board.domain.common.Address;
 import kr.co.octavina.board.domain.common.Role;
 import kr.co.octavina.board.domain.common.Status;
 import kr.co.octavina.board.repository.MemberRepository;
+import kr.co.octavina.board.service.dto.AddressDto;
 import kr.co.octavina.board.service.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,16 +30,23 @@ class MemberServiceTest {
     public void 사용자_등록() {
         //given
         MemberDto newMember = new MemberDto();
-//        newMember.setLoginId("rarity");
-//        newMember.setPassword("1234");
-//        newMember.setName("래리티");
+        newMember.setLoginId("rarity");
+        newMember.setPassword("1234");
+        newMember.setName("래리티");
+
 //        newMember.setLoginId("applejack");
 //        newMember.setPassword("1234");
 //        newMember.setName("애플잭");
 
-        newMember.setLoginId("pinkiepie");
-        newMember.setPassword("1234");
-        newMember.setName("핑키파이");
+//        newMember.setLoginId("pinkiepie");
+//        newMember.setPassword("1234");
+//        newMember.setName("핑키파이");
+
+//        newMember.setLoginId("twilight");
+//        newMember.setPassword("1234");
+//        newMember.setName("트와일라잇");
+
+        newMember.setAddressDto(new AddressDto("123123","제주도", "서귀포시"));
 
         newMember.setRole(Role.MEMBER);
         newMember.setStatus(Status.CREATED);

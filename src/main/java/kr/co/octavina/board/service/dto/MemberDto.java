@@ -26,18 +26,21 @@ public class MemberDto {
     private Role role;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private AddressDto addressDto;
 
     public Member toEntity() {
         return Member.builder()
-                .id(this.id)
-                .loginId(this.loginId)
-                .name(this.name)
-                .password(this.password)
-                .role(this.role)
-                .status(this.status)
+                .id(this.getId())
+                .loginId(this.getLoginId())
+                .name(this.getName())
+                .password(this.getPassword())
+                .role(this.getRole())
+                .status(this.getStatus())
+                .address(this.getAddressDto().toEntity())
                 .build();
     }
 
+    @AllArgsConstructor
     @NoArgsConstructor
     @Getter @Setter @ToString
     public static class MemberInfo {

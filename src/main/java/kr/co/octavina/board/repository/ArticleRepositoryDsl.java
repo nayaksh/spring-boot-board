@@ -14,5 +14,7 @@ public interface ArticleRepositoryDsl {
 
     List<ArticleSearchDto> getSearchArticles(ArticleSearchCondition condition);
 
-    Page<ArticleSearchDto> findSearchArticlesByPagination(ArticleSearchCondition condition, Pageable pageable);
+    Page<ArticleSearchDto> findArticlesByPagination(ArticleSearchCondition condition, Pageable pageable);
+
+    Page<ArticleSearchDto> findArticlesWithCreatorByPagination(ArticleSearchCondition condition, Pageable pageable);
 }

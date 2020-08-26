@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.format.DateTimeFormatter;
 
-@Configuration
+//@Configuration
 public class JacksonDateFormatConfig {
     private static final String dateFormat = "yyyy-MM-dd";
     private static final String datetimeFormat = "yyyy-MM-dd HH:mm:ss";
